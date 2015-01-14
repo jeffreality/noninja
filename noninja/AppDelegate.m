@@ -14,11 +14,4 @@
 
 @implementation AppDelegate
 
-- (void) applicationDidChangeScreenParameters:(NSNotification *)notification {
-    //self.delegate.window.screen
-    
-    //AppDelegate *delegate = [[NSApplication sharedApplication] delegate];
-    //return [super constrainFrameRect:frameRect toScreen:delegate.window.screen];
-}
-
 @end

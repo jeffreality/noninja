@@ -28,11 +28,10 @@
     
     [self setUpRecording];
     
-    
-    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(switchScreen)
-                                                 name:NSApplicationDidChangeScreenParametersNotification
-                                               object:nil];
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self
+                                                           selector:@selector(switchSpace)
+                                                               name:NSWorkspaceActiveSpaceDidChangeNotification
+                                                             object:[NSWorkspace sharedWorkspace]];
 }
 
 
@@ -76,10 +75,6 @@
     
     _previewLayer.affineTransform = CGAffineTransformMakeScale (-1,1);
     
-    NSLog(@"%f %f", _previewLayer.frame.size.width, _previewLayer.frame.size.height);
-    
-    //_previewLayer.frame = CGRectMake (0, 0, 400, 200);
-    
     [_videoPreviewView setWantsLayer:YES];
     [_videoPreviewView.layer addSublayer:_previewLayer];
     
@@ -95,25 +90,8 @@
     [_session stopRunning];
 }
 
-- (void) switchScreen {
-    
-    NSWindow *mywindow = self.view.window;
-    NSPoint pos;
-    pos.x = [[NSScreen mainScreen] frame].size.width - [mywindow frame].size.width ;
-    
-    pos.y = 0.0f;
-    
-    NSPoint mouseLoc = [NSEvent mouseLocation];
-    NSEnumerator *screenEnum = [[NSScreen screens] objectEnumerator];
-    NSScreen *screen;
-    while ((screen = [screenEnum nextObject]) && !NSMouseInRect(mouseLoc, [screen frame], NO));
-    
-    
-    pos.x = [screen frame].size.width - [mywindow frame].size.width ;
-    
-    
-    [self.view.window setFrame:CGRectMake(pos.x, pos.y, [mywindow frame].size.width , [mywindow frame].size.height) display:YES];
-    
+- (void) switchSpace {
+    [[self.view window] orderFront:self];
 }
 
 @end
